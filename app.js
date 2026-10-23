@@ -59,6 +59,15 @@ async function loadCourseData() {
     }
   } catch (err) {
     console.warn('[PNU HRD] 실시간 시트 연결 실패, 백업 데이터 사용:', err);
+    // 1. file:/// 환경 또는 로컬 스크립트로 탑재된 window.FALLBACK_COURSES 우선 활용
+    if (window.FALLBACK_COURSES && Array.isArray(window.FALLBACK_COURSES) && window.FALLBACK_COURSES.length > 0) {
+      AppState.courses = cleanCourseData(window.FALLBACK_COURSES);
+      AppState.syncSource = 'fallback';
+      updateSyncIndicator('fallback', '오프라인 캐시 데이터 표시 중');
+      return AppState.courses;
+    }
+    
+    // 2. data-fallback.json fetch 시도
     try {
       const fbRes = await fetch(SHEET_CONFIG.fallbackJsonUrl);
       const fbData = await fbRes.json();
