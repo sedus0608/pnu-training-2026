@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 부산대학교 직무연수 카탈로그 포털</title>
+  
+  <!-- 웹폰트 Pretendard -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  
+  <!-- 공통 스타일시트 -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- CSV 파싱 라이브러리 PapaParse CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+
+  <!-- 1. 사이트 글로벌 헤더 -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand-group">
+        <div class="brand-emblem" aria-hidden="true">PNU</div>
+        <div class="brand-text">
+          <h1>
+            부산대학교 직무연수
+            <span class="brand-badge">2026 카탈로그</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="header-status">
+        <div class="sync-dot syncing" id="syncDot"></div>
+        <span id="syncLabel">데이터 동기화 준비 중...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. 히어로 브리프 섹션 -->
+  <section class="hero-section">
+    <div class="container hero-content">
+      <div class="hero-subtitle">PUSAN NATIONAL UNIVERSITY · HRD PORTAL 2026</div>
+      <h2 class="hero-title">도약하는 부산대, 성장을 잇는<br>2026학년도 교직원 직무역량 카탈로그</h2>
+      <p class="hero-desc">
+        법정의무교육부터 대학행정 실무, 생성형 AI 및 데이터 분석, 공직 청렴까지 교직원의 전문성 향상을 위한 전체 32개 직무연수 과정을 한곳에서 확인하고 신청하세요.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num" id="totalCoursesNum">32</span>
+          <span class="stat-label">총 개설 과정</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">6</span>
+          <span class="stat-label">법정필수 교육</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">10</span>
+          <span class="stat-label">전문 행정 분야</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">실시간 시트 연동</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 검색 및 다차원 필터 컨트롤 바 -->
+  <section class="controls-wrapper">
+    <div class="container controls-inner">
+      <!-- 통합 검색창 -->
+      <div class="search-row">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            id="searchInput" 
+            class="search-input" 
+            placeholder="과정명, 부서명, 직무 키워드(예: 챗GPT, 계약, 복무, 법정)를 검색하세요..."
+            autocomplete="off"
+          />
+          <button type="button" id="searchClear" class="search-clear" aria-label="검색어 지우기">✕</button>
+        </div>
+      </div>
+
+      <!-- 이수구분 탭 & 세부 셀렉터 -->
+      <div class="tab-row">
+        <div class="tabs-group" role="tablist">
+          <button type="button" class="tab-btn active" data-type="all">전체 과정</button>
+          <button type="button" class="tab-btn" data-type="필수">🔴 필수</button>
+          <button type="button" class="tab-btn" data-type="권장">🟡 권장</button>
+          <button type="button" class="tab-btn" data-type="선택">🔵 선택</button>
+        </div>
+
+        <div class="filter-selects">
+          <select id="fieldSelect" class="filter-select">
+            <option value="all">모든 직무분야</option>
+          </select>
+
+          <select id="methodSelect" class="filter-select">
+            <option value="all">모든 교육방식</option>
+          </select>
+
+          <select id="targetSelect" class="filter-select">
+            <option value="all">모든 교육대상</option>
+          </select>
+
+          <button type="button" id="btnReset" class="btn-reset">
+            <span>↺</span> 필터 초기화
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 연수 과정 목록 그리드 섹션 -->
+  <main class="main-content">
+    <div class="container">
+      <div class="results-header">
+        <div class="results-count" id="resultsCount">
+          연수 목록을 실시간으로 불러오는 중입니다...
+        </div>
+      </div>
+
+      <!-- 카드 그리드 컨테이너 (로딩 시 스켈레톤 기본 표시) -->
+      <div class="course-grid" id="courseGrid">
+        <div class="skeleton-card">
+          <div class="skeleton-line" style="width: 40%;"></div>
+          <div class="skeleton-line" style="width: 80%; height: 24px;"></div>
+          <div class="skeleton-line" style="width: 100%;"></div>
+          <div class="skeleton-line" style="width: 90%;"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-line" style="width: 40%;"></div>
+          <div class="skeleton-line" style="width: 75%; height: 24px;"></div>
+          <div class="skeleton-line" style="width: 100%;"></div>
+          <div class="skeleton-line" style="width: 85%;"></div>
+        </div>
+        <div class="skeleton-card">
+          <div class="skeleton-line" style="width: 40%;"></div>
+          <div class="skeleton-line" style="width: 85%; height: 24px;"></div>
+          <div class="skeleton-line" style="width: 100%;"></div>
+          <div class="skeleton-line" style="width: 95%;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 5. 푸터 -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-top">
+        <div class="footer-info">
+          <strong>국립부산대학교 인재개발원 · 정보화본부</strong><br>
+          (46241) 부산광역시 금정구 부산대학로63번길 2 (장전동)<br>
+          데이터 출처: <a href="https://docs.google.com/spreadsheets/d/13zZyhH-Tgfv3i1961h39Cjds2HmVEo1k/edit?gid=894119997" target="_blank" rel="noopener noreferrer">2026 부산대 직무연수 구글 스프레드시트</a>
+        </div>
+        <div class="footer-links">
+          <span>새로고침 시 구글 시트의 최신 수정사항이 즉시 반영됩니다.</span>
+        </div>
+      </div>
+      <div style="font-size: 0.78rem; color: #94a3b8; border-top: 1px solid var(--border-light); padding-top: 1rem;">
+        © 2026 Pusan National University HRD Portal. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- 공통 자바스크립트 -->
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initMainPage();
+    });
+  </script>
+</body>
+</html>

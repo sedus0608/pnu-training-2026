@@ -1,0 +1,29 @@
+# Environments and Secrets
+.env
+.env.*
+*.env
+*.key
+*.pem
+*.token
+*.secret
+*_secret*
+credentials.json
+token.json
+
+# Logs and Caches
+*.log
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Verification and Dump scripts/images (Optional / Local test only)
+verify_*.py
+extract_*.py
+*.tmp

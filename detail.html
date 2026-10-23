@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>직무연수 상세 정보 - 2026 부산대학교</title>
+  
+  <!-- 웹폰트 Pretendard -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  
+  <!-- 공통 스타일시트 -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- CSV 파싱 라이브러리 PapaParse CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+
+  <!-- 사이트 글로벌 헤더 -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand-group">
+        <div class="brand-emblem" aria-hidden="true">PNU</div>
+        <div class="brand-text">
+          <h1>
+            부산대학교 직무연수
+            <span class="brand-badge">2026 카탈로그</span>
+          </h1>
+        </div>
+      </a>
+
+      <div class="header-status">
+        <div class="sync-dot syncing" id="syncDot"></div>
+        <span id="syncLabel">데이터 동기화 중...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 상세 페이지 메인 컨테이너 -->
+  <main class="main-content">
+    <div class="detail-container" id="detailContainer">
+      <!-- 로딩 스켈레톤 기본 표시 -->
+      <a href="index.html" class="back-link">
+        <span>←</span> 전체 연수 목록으로 돌아가기
+      </a>
+      <div class="detail-card">
+        <div class="detail-header">
+          <div class="skeleton-line" style="width: 25%; margin-bottom: 12px;"></div>
+          <div class="skeleton-line" style="width: 70%; height: 32px; margin-bottom: 12px;"></div>
+          <div class="skeleton-line" style="width: 90%;"></div>
+        </div>
+        <div class="detail-body">
+          <div class="skeleton-line" style="width: 100%; height: 80px;"></div>
+          <div class="skeleton-line" style="width: 100%; height: 80px;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-top">
+        <div class="footer-info">
+          <strong>국립부산대학교 인재개발원 · 정보화본부</strong><br>
+          (46241) 부산광역시 금정구 부산대학로63번길 2 (장전동)<br>
+          데이터 출처: <a href="https://docs.google.com/spreadsheets/d/13zZyhH-Tgfv3i1961h39Cjds2HmVEo1k/edit?gid=894119997" target="_blank" rel="noopener noreferrer">2026 부산대 직무연수 구글 스프레드시트</a>
+        </div>
+        <div class="footer-links">
+          <a href="index.html">← 전체 연수 목록으로 이동</a>
+        </div>
+      </div>
+      <div style="font-size: 0.78rem; color: #94a3b8; border-top: 1px solid var(--border-light); padding-top: 1rem;">
+        © 2026 Pusan National University HRD Portal. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- 공통 자바스크립트 -->
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initDetailPage();
+    });
+  </script>
+</body>
+</html>
